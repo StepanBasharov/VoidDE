@@ -32,7 +32,9 @@ for type, icon in pairs(signs) do
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
--- Настройка diagnostics через современный API
+vim.fn.sign_define("LspCodeLens", { text = "", texthl = "LspCodeLens", linehl = "", numhl = "" })
+vim.fn.sign_define("LspCodeLensSeparator", { text = "─", texthl = "Comment", linehl = "", numhl = "" })
+
 vim.diagnostic.config({
     virtual_text = true,
     signs = true,

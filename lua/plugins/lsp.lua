@@ -18,12 +18,35 @@ return {
                 filetypes = { "go", "gomod", "gowork", "gotmpl" },
                 root_markers = { "go.work", "go.mod", ".git" },
                 capabilities = capabilities,
-                on_attach = on_attach,
+                on_attach = function(client, bufnr)
+                    on_attach(client, bufnr)
+                    if client.server_capabilities.codeLensProvider then
+                        vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+                            buffer = bufnr,
+                            callback = vim.lsp.codelens.refresh,
+                        })
+                        vim.lsp.codelens.refresh()
+                    end
+                end,
                 settings = {
                     gopls = {
                         analyses = { unusedparams = true, shadow = true },
                         staticcheck = true,
                         gofumpt = true,
+                        codelenses = {
+                            gc_details = true,
+                            generate = true,
+                            regenerate_cgo = true,
+                            run_govulncheck = true,
+                            test = true,
+                            tidy = true,
+                            upgrade_dependency = true,
+                            vendor = true,
+                        },
+                        usePlaceholders = false,
+                        completeUnimported = true,
+                        directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+                        semanticTokens = true,
                     },
                 },
             })

@@ -64,7 +64,6 @@ return {
         end,
     },
 
-    -- Bufferline — табы сверху
     {
         "akinsho/bufferline.nvim",
         version = "*",
@@ -72,10 +71,12 @@ return {
         config = function()
             require("bufferline").setup({
                 options = {
+                    mode = "buffers",
                     diagnostics = "nvim_lsp",
-                    show_buffer_close_icons = false,
+                    show_buffer_close_icons = true,
                     show_close_icon = false,
-                    separator_style = "slant",
+                    separator_style = "thin",
+                    always_show_bufferline = true,
                     offsets = {
                         {
                             filetype = "NvimTree",
@@ -84,10 +85,16 @@ return {
                             separator = true,
                         },
                     },
+                    indicator = {
+                        style = "none",
+                    },
+                    diagnostics_indicator = function(count, level)
+                        local icon = level:match("error") and " " or " "
+                        return " " .. icon .. count
+                    end,
                 },
             })
 
-            -- Клавиши переключения табов
             vim.keymap.set("n", "<Tab>", "<cmd>BufferLineCycleNext<CR>", { desc = "Next buffer" })
             vim.keymap.set("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Previous buffer" })
             vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Close current buffer" })
@@ -119,33 +126,29 @@ return {
                         return LazyVim.pick(cmd, opts)()
                     end,
                     header = [[                                         
-                           
 
-                  ██████                  
-   ███████████████▓▓▓▓▓▓███████████████   
-  ██░░░░░░░░░░░░░░▓█▓▓▓▓▓█▒░░░░░░░░░░░██  
-  ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓█▓▓▓▓█▓▒▒▒▒▒▒▒▒▒▒▒▒▓█ 
-    ██▓▒▒▒▒▒▒▒▒▒▒▒▓█▓▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▓█ 
-     █▓░▒▒▒▒▒▒▒▒▓██▓▓▓▓▓▓▓█▒░▒▒▒▒▒▒▒▓▓██  
-     █▓░▒▒▒▒▒▒▒▒▓██▓▓▓▓▓█▓░░░▒▒▒▒▒▒▓▓██   
-     █▓░▒▒▒▒▒▒▒▒▓██▓▓▓█▓░░░▒▒▒▒▒▒▒███     
-    ██▓░▒▒▒▒▒▒▒▒▓██▓▓▓▒░░▒▒▒▒▒▒▓▓█████    
-  ██▓█▓░▒▒▒▒▒▒▒▒▓██▓▒░░░▒▒▒▒▒▒▓█▓▓▓▓████  
- █▓▒▓█▓░▒▒▒▒▒▒▒▒▓█▒░░▒▒▒▒▒▒▓▓█▓▓▓▓▓▓▓▓███ 
-█▓▓▓▓█▓░▒▒▒▒▒▒▒▒▒░░░▒▒▒▒▒▒▓▓█▓▓▓▓▓▓▓▓▓▓███
-██▓▒▓█▓░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓█▓▓▓▓▓▓▓▓▓▓▓▓████
-  ██▓█▓░▒▒▒▒▒▒▒▒▒▒▒▒▒▓███▓▓▓▓▓▓▓▓▓▓▓████  
-    ██▓░▒▒▒▒▒▒▒▒▒▒▒▒█▒▒▓█▓▓▓▓▓▓▓▓▓█████   
-     █▓░▒▒▒▒▒▒▒▒▒▒▒▓████▓████▓█████████   
-     █▓░▒▒▒▒▒▒▒▒▒▒▓█▓▒▒▓█▓▒▒▒▓▒▒▒▒▓▒▒▒▓▓█ 
-     █▓░▒▒▒▒▒▒▒▒▓███▒▒▓███▒▒▒▓█▓▒▒▓█▓▒▓██ 
-     █▓░▒▒▒▒▒▒▓▓█▓█▓▒▒▓██▒▒▓██▒▒▒██▓▒▒██  
-     █▓░▒▒▒▒▒▓██▓█▓▒▒▓██▒▒▓██▓▒▒▓█▓▒▒▓██  
-      ██▒▒▒▓██ ███▓▒▒▒▓▓▒▒▓██▒▒▓██▒▒▒▒██  
-       █████     ██████████ ████  █████   
-                  ██████                  
-
-                     
+                    
+                    .                    
+    ##############..... ##############   
+    ##############......##############   
+      ##########..........##########     
+      ##########........##########       
+      ##########.......##########        
+      ##########.....##########..        
+      ##########....##########.....      
+    ..##########..##########.........    
+  ....##########.#########.............  
+    ..################JJJ............    
+      ################.............      
+      ##############.JJJ.JJJJJJJJJJ      
+      ############...JJ...JJ..JJ  JJ     
+      ##########....JJ...JJ..JJ  JJ      
+      ########......JJJ..JJJ JJJ JJJ     
+      ######    .........                
+                  .....                  
+                    .    
+                                                        
+                   
             ]],
                     keys = {
                         { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
